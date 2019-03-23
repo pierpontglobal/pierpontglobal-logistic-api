@@ -1,0 +1,41 @@
+version: '2.1'
+
+services:
+
+  psql:
+    command: postgres -c logging_collector=on
+      -c log_min_duration_statement=0
+      -c log_directory='/var/log/postgresql'
+      -c log_min_messages='WARNING'
+      -c log_rotation_age='1d'
+      -c log_rotation_size='1GB'
+    container_name: PierpontGlobalLogistic-DB
+    hostname: psql
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'qusUt1i9obru4ISTUG2f'
+    ports:
+      - "5432:5432"
+    volumes:
+      - psql:/var/log/postgresql
+
+  rails:
+    restart: always
+    user: root
+    container_name: PierpontGlobalLogistic-API
+    build: .
+    command: bin/start
+    volumes:
+      - .:/pierpontglobal-logistic-api
+    environment:
+      - DB_HOST=psql
+      - DB_PASSWORD=qusUt1i9obru4ISTUG2f
+      - DB_USER=postgres
+    ports:
+      - "3000:3000"
+
+
+volumes:
+  psql:
+    driver: local
