@@ -8,11 +8,10 @@ RUN mkdir /pierpontglobal-logistic-api
 WORKDIR /pierpontglobal-logistic-api
 
 COPY Gemfile /pierpontglobal-logistic-api/Gemfile
-COPY Gemfile.lock /pierpontglobal-logistic-api/Gemfile.lock
 
 COPY . /pierpontglobal-logistic-api
 
-RUN gem install bundler -v 1.17.3
+RUN gem install bundler
 RUN bundle check || bundle install
 
 CMD bundle exec rails server -b 0.0.0.0
