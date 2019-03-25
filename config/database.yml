@@ -84,5 +84,3 @@ test:
 production:
   <<: *default
   database: LogisticAPI_production
-  username: LogisticAPI
-  password: <%= ENV['LOGISTICAPI_DATABASE_PASSWORD'] %>
