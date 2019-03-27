@@ -16,7 +16,7 @@ services:
     environment:
       POSTGRES_PASSWORD: 'qusUt1i9obru4ISTUG2f'
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - psql:/var/log/postgresql
 
@@ -31,9 +31,12 @@ services:
     environment:
       - DB_HOST=psql
       - DB_PASSWORD=qusUt1i9obru4ISTUG2f
+      - DB_PORT=5432
       - DB_USER=postgres
+      - PORT=3001
+      - DEVISE_JWT_SECRET_KEY=502145196570ec2249ed965d14ab0d1719ec11f7987b79fb93f14df94303890f211b8e74b72c28828de429c9dab71e4efbb803423bea46636b5359ba4cad3f19
     ports:
-      - "3000:3000"
+      - "3001:3001"
 
 
 volumes:
