@@ -14,4 +14,12 @@ Rails.application.routes.draw do
 
   get '/health', to: 'application#health'
 
+  post '/oauth/ppg', to: 'application#new_oauth_session'
+
+  namespace :api do
+    namespace :v1 do
+      get '/test', to: 'base_api#test'
+    end
+  end
+
 end
