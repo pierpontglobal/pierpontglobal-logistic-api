@@ -40,7 +40,7 @@ class ApplicationController < ActionController::API
   rescue
     render json: 'Something went wrong check credentials', status: :unauthorized
   end
-
+  
   def render_resource(resource)
     if resource.errors.empty?
       render json: resource
