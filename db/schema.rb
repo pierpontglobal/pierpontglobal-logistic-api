@@ -10,14 +10,148 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_27_170207) do
+ActiveRecord::Schema.define(version: 2019_03_28_195041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "agents", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "charges", force: :cascade do |t|
+    t.string "status"
+    t.string "code"
+    t.string "description"
+    t.integer "quantity"
+    t.string "unit"
+    t.decimal "rate"
+    t.decimal "profit"
+    t.string "bill_to_name"
+    t.decimal "quantity_expense"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "commodities", force: :cascade do |t|
+    t.string "status"
+    t.integer "reference"
+    t.integer "pieaces"
+    t.string "package"
+    t.string "description"
+    t.string "dimension"
+    t.decimal "weight"
+    t.decimal "volume"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "commodity_types", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "consignees", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "containers", force: :cascade do |t|
+    t.decimal "length"
+    t.decimal "width"
+    t.decimal "height"
+    t.decimal "tare_weight"
+    t.decimal "next_weight"
+    t.decimal "total_weight"
+    t.decimal "volume"
+    t.decimal "vol_weight"
+    t.decimal "square_pt"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.integer "quantity"
+    t.string "units"
+    t.string "rates"
+    t.decimal "amount"
+    t.string "currency"
+    t.string "payment"
+    t.date "date"
+    t.string "vendor"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "incomes", force: :cascade do |t|
+    t.integer "quantity"
+    t.string "units"
+    t.string "rates"
+    t.decimal "amount"
+    t.string "currency"
+    t.string "payment"
+    t.date "date"
+    t.string "bill_to_address"
+    t.string "bill_to_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "issuing_companies", force: :cascade do |t|
+    t.string "company_name"
+    t.string "company_location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "jwt_blacklist", id: :serial, force: :cascade do |t|
     t.string "jti", null: false
     t.index ["jti"], name: "index_jwt_blacklist_on_jti"
+  end
+
+  create_table "mode_of_transportations", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "order_states", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.integer "order_number"
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "services", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shippers", force: :cascade do |t|
+    t.string "name"
+    t.string "address"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "shippments", force: :cascade do |t|
+    t.integer "order_number"
+    t.string "origin_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|

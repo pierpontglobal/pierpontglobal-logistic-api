@@ -1,0 +1,2 @@
+class IssuingCompany < ApplicationRecord
+end

@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: MyString
+  code: MyString
+  description: MyString
+  quantity: 1
+  unit: MyString
+  rate: 9.99
+  profit: 9.99
+  bill_to_name: MyString
+  quantity_expense: 9.99
+
+two:
+  status: MyString
+  code: MyString
+  description: MyString
+  quantity: 1
+  unit: MyString
+  rate: 9.99
+  profit: 9.99
+  bill_to_name: MyString
+  quantity_expense: 9.99

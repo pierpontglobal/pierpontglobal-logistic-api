@@ -1,0 +1,2 @@
+class OrderState < ApplicationRecord
+end

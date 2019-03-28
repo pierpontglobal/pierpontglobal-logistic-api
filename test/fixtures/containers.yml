@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  length: 9.99
+  width: 9.99
+  height: 9.99
+  tare_weight: 9.99
+  next_weight: 9.99
+  total_weight: 9.99
+  volume: 9.99
+  vol_weight: 9.99
+  square_pt: 9.99
+
+two:
+  length: 9.99
+  width: 9.99
+  height: 9.99
+  tare_weight: 9.99
+  next_weight: 9.99
+  total_weight: 9.99
+  volume: 9.99
+  vol_weight: 9.99
+  square_pt: 9.99
