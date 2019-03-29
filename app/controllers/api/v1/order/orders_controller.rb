@@ -6,8 +6,9 @@ class Api::V1::Order::OrdersController < ApplicationController
   end
 
   def get_order_shippment
-    orders = ::Order.includes(:shippment)
-    order = orders.find(params[:id])
+    order = ::Order.joins(:order_state).where(:orders => {
+        order_id: params[:id]
+    })
     render json: order, status: :ok
   end
 
