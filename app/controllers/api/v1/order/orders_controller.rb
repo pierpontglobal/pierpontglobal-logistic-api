@@ -11,14 +11,21 @@ class Api::V1::Order::OrdersController < ApplicationController
   end
 
   def create_shippment
-    detail = order_detail_params
-
     # Add this option later....
     # commodities = params[:commodities]
     # charges = params[:charges]
+    #
+    shipp = ::Shippment.create!(order_detail_params)
 
-    shipp = ::Shippment.first_or_create!(order_detail_params)
-    order = create(shipp.order_number, shipp.id)
+    check_order = ::Order.where(order_number: params[:order_number])
+    order = {}
+    if check_order.nil?
+      order = create(params[:order_number], shipp[:id])
+    else
+      order = check_order
+    end
+
+
 
     render json: {
         shippment: shipp,
@@ -30,19 +37,19 @@ class Api::V1::Order::OrdersController < ApplicationController
 
 
   def create(order_number, shippment_id)
-    order = ::Order.first_or_create!(
+    order = ::Order.create!(
                :order_number => order_number,
                :user_id => current_user.id,
                :shippment_id => shippment_id
-    )
+              )
     order
   end
 
 
   def order_detail_params
-    params.require('order_detail').permit('order_number, service_type, date, issuing_company_id, shipper_id,
-    consignee_id, agent_id, mode_of_transportation_id, destination_name,
-    origin_name')
+    params.require(:order_detail).permit(:order_number, :service_type, :issuing_company_id, :shipper_id,
+    :consignee_id, :agent_id, :mode_of_transportation_id, :destination_name,
+    :origin_name)
   end
 
 
