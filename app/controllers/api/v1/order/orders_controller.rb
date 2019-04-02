@@ -5,7 +5,8 @@ class Api::V1::Order::OrdersController < ApplicationController
     token = params[:token]
 
     # Call PierpontGlobal API with token to get bids
-    orders = ::Order.all
+    orders = ::Order.all.joins!(:shippment).select('orders.order_number, orders.id, shippments.origin_name,
+      shippments.service_type, shippments.destination_name')
     render json: orders, :status => :ok
 
   end

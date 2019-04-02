@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
       namespace :order do
         # Orders
-        get '/', to: 'orders#index'
+        get '/', to: 'orders#show'
         post '/create_shippment', to: 'orders#create_shippment'
       end
 
@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       namespace :shippment do
         # Shippments
         get '/', to: 'shippments#show'
+        get '/:order_number', to: 'shippments#showByOrderNumber'
       end
     end
   end

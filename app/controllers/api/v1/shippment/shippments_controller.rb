@@ -11,6 +11,16 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
     render json: ::Shippment.all.sanitized, status: :ok
   end
 
+  def showByOrderNumber
+    if params[:order_number].present?
+      render json: ::Shippment.where(:order_number => params[:order_number])[0], :status => :ok
+    else
+      render json: {
+          error: "Please, provide an id"
+      }, status: :bad_request
+    end
+  end
+
 
   def shippments_parameters
     params.require('shippment').permit('order_number', 'service_type', 'destination_name', 'origin_name',
