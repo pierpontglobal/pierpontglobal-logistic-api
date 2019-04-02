@@ -15,21 +15,25 @@ class Api::V1::Order::OrdersController < ApplicationController
     # commodities = params[:commodities]
     # charges = params[:charges]
     #
-    shipp = ::Shippment.create!(order_detail_params)
+    check_shipp = ::Shippment.where(order_number: params[:order_number])[0]
+    check_order = ::Order.where(order_number: params[:order_number])[0]
 
-    check_order = ::Order.where(order_number: params[:order_number])
-    order = {}
-    if check_order.nil?
-      order = create(params[:order_number], shipp[:id])
+    if check_shipp == nil
+      @shipp = ::Shippment.create!(order_detail_params)
     else
-      order = check_order
+      @shipp = check_shipp
+      @shipp.update!(order_detail_params)
     end
 
-
+    if check_order == nil
+      @order = create(params[:order_number], @shipp[:id])
+    else
+      @order = check_order
+    end
 
     render json: {
-        shippment: shipp,
-        order: order
+        shippment: @shipp,
+        order: @order
     }, :status => :ok
 
 
