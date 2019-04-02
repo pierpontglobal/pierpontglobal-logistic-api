@@ -1,8 +1,12 @@
 class Shippment < ApplicationRecord
-  has_one :order
-  has_one  :mode_of_transportation
+  belongs_to :order
   has_many :charges
   has_many :commodities
+  belongs_to :consignee
+  belongs_to :agent
+  belongs_to :mode_of_transportation
+  belongs_to :issuing_company
+  belongs_to :shipper
 
   scope :sanitized, lambda {
     select(
@@ -11,12 +15,7 @@ class Shippment < ApplicationRecord
         :service_type,
         :created_at,
         :destination_name,
-        :origin_name,
-        :issuing_company_id,
-        :consignee_id,
-        :shipper_id,
-        :agent_id,
-        :mode_of_transportation_id
+        :origin_name
     )
   }
 

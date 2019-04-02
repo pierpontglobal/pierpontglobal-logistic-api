@@ -1,5 +1,7 @@
 class Shipper < ApplicationRecord
 
+  has_many :shippment
+
   scope :sanitized, lambda {
     select(
         :id,

@@ -14,15 +14,13 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
   def showByOrderNumber
     if params[:order_number].present?
       @shipp =  ::Shippment.where(:order_number => params[:order_number])
+                    .joins!(:consignee, :agent, :mode_of_transportation, :shipper, :issuing_company)
+                    .select('shippments.*, consignees.name as consignee_name, consignees.address as consignee_address',
+                    'agents.name as agent_name', 'agents.address as agent_address', 'shippers.name as shipper_name',
+                    'shippers.address as shipper_address', 'shippers.location as shipper_location', 'shippers.place_id as shipper_place_id',
+                    'shippers.city as shipper_city', 'shippers.vicinity as shipper_vicinity')[0]
 
-      if @shipp.nil?
-        render json: null, status: :not_found
-      else
-
-        @shipp = @shipp.joins!(:consignee).select('consignees.name, consignees.address')
-        render json: @shipp, :status => :ok
-
-      end
+      render json: @shipp, :status => :ok
 
     else
       render json: {
