@@ -14,7 +14,11 @@ class ApplicationController < ActionController::API
 
     url = URI("#{ENV['PIERPONTGLOBAL_URL']}/oauth/user")
 
+    puts url
+
     http = Net::HTTP.new(url.host, url.port)
+
+    puts http
 
     request = Net::HTTP::Post.new(url)
     request["Content-Type"] = 'application/json'
@@ -37,8 +41,9 @@ class ApplicationController < ActionController::API
 
     response.set_header('Authorization', "Bearer #{token}")
     render json: response_data.body, status: :ok
-  rescue
-    render json: 'Something went wrong check credentials', status: :unauthorized
+
+    rescue
+      render json: 'Something went wrong check credentials', status: :unauthorized
   end
   
   def render_resource(resource)

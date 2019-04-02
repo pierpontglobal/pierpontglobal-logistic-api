@@ -1,5 +1,5 @@
 class Order < ApplicationRecord
-  has_one :shippment
+  belongs_to :shippment
   has_one :order_state
   belongs_to :user
 end
