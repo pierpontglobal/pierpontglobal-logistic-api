@@ -43,6 +43,24 @@ class Api::V1::Order::OrdersController < ApplicationController
         order: @order
     }, :status => :ok
 
+  end
+
+  def detail_options
+    consignees = ::Consignee.all
+    shippers = ::Shipper.all
+    transports = ::ModeOfTransportation.all
+    containers = ::Container.all
+    issuing_companies = ::IssuingCompany.all
+    agents = ::Agent.all
+
+    render json: {
+        consignees: consignees,
+        shippers: shippers,
+        transports: transports,
+        containers: containers,
+        issuing_companies: issuing_companies,
+        agents: agents
+    }, :status => :ok
 
   end
 
