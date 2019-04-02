@@ -9,21 +9,21 @@ services:
       -c log_min_messages='WARNING'
       -c log_rotation_age='1d'
       -c log_rotation_size='1GB'
-    container_name: PierpontGlobalLogistic-DB
+    container_name: pierpontlogistic-psql
     hostname: psql
     image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: 'qusUt1i9obru4ISTUG2f'
     ports:
-      - "5433:5432"
+      - "5432"
     volumes:
       - psql:/var/log/postgresql
 
   rails:
     restart: always
     user: root
-    container_name: PierpontGlobalLogistic-API
+    container_name: pierpontlogistic-api
     build: .
     command: bin/start
     volumes:
@@ -35,9 +35,9 @@ services:
       - DB_USER=postgres
       - PORT=3001
       - DEVISE_JWT_SECRET_KEY=502145196570ec2249ed965d14ab0d1719ec11f7987b79fb93f14df94303890f211b8e74b72c28828de429c9dab71e4efbb803423bea46636b5359ba4cad3f19
-      - PIERPONTGLOBAL_PK=5f9vvxYSEifXmH1fzhXN29Wf
-      - PIERPONTGLOBAL_SK=747a6d62acf3d93fd2ef2be19f9aa65d6487e17d
-      - PIERPONTGLOBAL_URL=http://10.0.0.11:3000
+      - PIERPONTGLOBAL_PK=f626GTKhH8vmec1gzL2oe8fY
+      - PIERPONTGLOBAL_SK=375425b531f9bf2daa9a82a61d16cb2ec800b5ed
+      - PIERPONTGLOBAL_URL=http://ppm1.local:3000
     ports:
       - "3001:3001"
 

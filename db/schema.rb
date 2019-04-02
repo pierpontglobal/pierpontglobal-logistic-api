@@ -47,7 +47,6 @@ ActiveRecord::Schema.define(version: 2019_03_29_123955) do
     t.decimal "volume"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "commodity_type_id"
   end
 
   create_table "commodity_types", force: :cascade do |t|
@@ -133,7 +132,6 @@ ActiveRecord::Schema.define(version: 2019_03_29_123955) do
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "order_state_id"
     t.bigint "user_id"
     t.bigint "shippment_id"
     t.index ["shippment_id"], name: "index_orders_on_shippment_id"
@@ -158,13 +156,6 @@ ActiveRecord::Schema.define(version: 2019_03_29_123955) do
     t.string "origin_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "service_id"
-    t.integer "issuing_company_id"
-    t.integer "shipper_id"
-    t.integer "consignee_id"
-    t.integer "agent_id"
-    t.integer "mode_of_transportation_id"
-    t.integer "order_id"
   end
 
   create_table "users", force: :cascade do |t|

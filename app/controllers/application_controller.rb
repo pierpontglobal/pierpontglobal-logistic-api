@@ -25,7 +25,7 @@ class ApplicationController < ActionController::API
 
     user = User.find_by(uuid: user_info['id'], provider: 'PPG')
     if user
-      token = Warden::JWTAuth::UserEncoder.new.call(user, 'user', nil)
+      token = Warden::JWTAuth::UserEncoder.new.call(user, 'user', nil)[0]
     else
       user = User.create!(
         uuid: user_info['id'],
@@ -35,7 +35,7 @@ class ApplicationController < ActionController::API
       token = Warden::JWTAuth::UserEncoder.new.call(user, 'user', nil)[0]
     end
 
-    response.set_header('Authorization', "Bearer #{token[0]}")
+    response.set_header('Authorization', "Bearer #{token}")
     render json: response_data.body, status: :ok
   rescue
     render json: 'Something went wrong check credentials', status: :unauthorized

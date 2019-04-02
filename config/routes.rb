@@ -21,6 +21,9 @@ Rails.application.routes.draw do
       # Base controller
       get '/test', to: 'base_api#test'
 
+      namespace :cars do
+        get '/:vin', to: 'cars#show'
+      end
 
       namespace :order do
         # Orders controller
