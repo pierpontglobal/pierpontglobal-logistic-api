@@ -13,7 +13,17 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
 
   def showByOrderNumber
     if params[:order_number].present?
-      render json: ::Shippment.where(:order_number => params[:order_number])[0], :status => :ok
+      @shipp =  ::Shippment.where(:order_number => params[:order_number])
+
+      if @shipp.nil?
+        render json: null, status: :not_found
+      else
+
+        @shipp = @shipp.joins!(:consignee).select('consignees.name, consignees.address')
+        render json: @shipp, :status => :ok
+
+      end
+
     else
       render json: {
           error: "Please, provide an id"
