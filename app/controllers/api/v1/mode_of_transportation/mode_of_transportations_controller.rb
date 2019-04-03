@@ -6,7 +6,8 @@ class Api::V1::ModeOfTransportation::ModeOfTransportationsController < Applicati
   end
 
   def show
-    render json: ::ModeOfTransportation.all, status: :ok
+    results = ::ModeOfTransportation.all
+    render json: results, status: :ok
   end
 
   def show_by_id

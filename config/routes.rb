@@ -21,7 +21,7 @@ Rails.application.routes.draw do
       # Base controller
       get '/test', to: 'base_api#test'
 
-      namespace :cars do
+      namespace :car do
         get '/:vin', to: 'cars#show'
       end
 
@@ -82,6 +82,15 @@ Rails.application.routes.draw do
         post '/', to: 'mode_of_transportations#create'
         put '/', to: 'mode_of_transportations#update'
         delete '/', to: 'mode_of_transportations#delete'
+      end
+
+      namespace :container do
+        # container
+        get '/', to: 'containers#show'
+        get '/:id', to: 'containers#show_by_id'
+        post '/', to: 'containers#create'
+        put '/', to: 'containers#update'
+        delete '/', to: 'containers#delete'
       end
 
     end
