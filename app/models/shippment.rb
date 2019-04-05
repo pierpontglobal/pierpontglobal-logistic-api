@@ -1,5 +1,5 @@
 class Shippment < ApplicationRecord
-  belongs_to :order
+  has_one :order
   has_many :charges
   has_many :commodities
   belongs_to :consignee

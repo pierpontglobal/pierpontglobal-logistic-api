@@ -11,7 +11,7 @@ class Api::V1::IssuingCompany::IssuingCompaniesController < ApplicationControlle
 
   def show_by_id
     if params[:id].present?
-      comp = ::IssuingCompanypin.find(params[:id])
+      comp = ::IssuingCompany.find(params[:id])
       render json: comp, :status => :ok
     else
       render json: { error: "Please, provide an ID" }, :status => :ok

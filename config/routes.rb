@@ -93,6 +93,13 @@ Rails.application.routes.draw do
         delete '/', to: 'containers#delete'
       end
 
+      namespace :commodity do
+        # commodity
+        post '/', to: 'commodities#create'
+        put '/', to: 'commodities#update'
+        delete '/', to: 'commodities#delete'
+      end
+
     end
   end
 

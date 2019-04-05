@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_03_160947) do
+ActiveRecord::Schema.define(version: 2019_04_05_164840) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,8 +23,7 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
   end
 
   create_table "charges", force: :cascade do |t|
-    t.string "status"
-    t.string "code"
+    t.string "type"
     t.string "description"
     t.integer "quantity"
     t.string "unit"
@@ -32,25 +31,29 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.decimal "profit"
     t.string "bill_to_name"
     t.decimal "quantity_expense"
+    t.integer "reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "shippment_id"
+    t.bigint "service_id"
+    t.index ["service_id"], name: "index_charges_on_service_id"
+    t.index ["shippment_id"], name: "index_charges_on_shippment_id"
   end
 
   create_table "commodities", force: :cascade do |t|
-    t.string "status"
-    t.integer "reference"
-    t.integer "pieaces"
-    t.string "package"
-    t.string "description"
-    t.string "dimension"
-    t.decimal "weight"
-    t.decimal "volume"
+    t.string "reference"
+    t.integer "pieces"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "shippment_id"
+    t.bigint "commodity_type_id"
+    t.index ["commodity_type_id"], name: "index_commodities_on_commodity_type_id"
+    t.index ["shippment_id"], name: "index_commodities_on_shippment_id"
   end
 
   create_table "commodity_types", force: :cascade do |t|
     t.string "name"
+    t.integer "custom_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -75,6 +78,10 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
+    t.bigint "shippment_id"
+    t.bigint "commodity_id"
+    t.index ["commodity_id"], name: "index_containers_on_commodity_id"
+    t.index ["shippment_id"], name: "index_containers_on_shippment_id"
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -88,6 +95,8 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.string "vendor"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "charge_id"
+    t.index ["charge_id"], name: "index_expenses_on_charge_id"
   end
 
   create_table "incomes", force: :cascade do |t|
@@ -102,6 +111,8 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.string "bill_to_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "charge_id"
+    t.index ["charge_id"], name: "index_incomes_on_charge_id"
   end
 
   create_table "issuing_companies", force: :cascade do |t|
@@ -135,6 +146,8 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.datetime "updated_at", null: false
     t.bigint "user_id"
     t.bigint "shippment_id"
+    t.bigint "order_state_id"
+    t.index ["order_state_id"], name: "index_orders_on_order_state_id"
     t.index ["shippment_id"], name: "index_orders_on_shippment_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
@@ -191,6 +204,15 @@ ActiveRecord::Schema.define(version: 2019_04_03_160947) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "charges", "services"
+  add_foreign_key "charges", "shippments"
+  add_foreign_key "commodities", "commodity_types"
+  add_foreign_key "commodities", "shippments"
+  add_foreign_key "containers", "commodities"
+  add_foreign_key "containers", "shippments"
+  add_foreign_key "expenses", "charges"
+  add_foreign_key "incomes", "charges"
+  add_foreign_key "orders", "order_states"
   add_foreign_key "orders", "shippments"
   add_foreign_key "orders", "users"
   add_foreign_key "shippments", "agents"

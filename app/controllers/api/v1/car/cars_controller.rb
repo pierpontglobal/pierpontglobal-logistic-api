@@ -13,14 +13,10 @@ class Api::V1::Car::CarsController < ApplicationController
 
     request = Net::HTTP::Get.new(url)
     request["Content-Type"] = 'application/json'
-    puts " >> >>> >>>>>>>>>  >>>>  #{current_user.uuid}"
-    puts sk
-    puts pk
     request.body = "{\n\t\"pk\": \"#{pk}\",\n\t\"sk\": \"#{sk}\",\n\t\"uuid\": \"#{current_user.uuid}\"\n}"
 
-    puts "will call rhtpp request >>> "
     response_data = http.request(request)
-    puts response_data
+
     car = JSON.parse(response_data.body)
     render json: car, status: :ok
   end

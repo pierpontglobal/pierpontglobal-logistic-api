@@ -6,8 +6,14 @@ class Api::V1::Order::OrdersController < ApplicationController
 
     # Call PierpontGlobal API with token to get bids
     orders = ::Order.all.joins!(:shippment).select('orders.order_number, orders.id, shippments.origin_name,
-      shippments.service_type, shippments.destination_name')
-    render json: orders, :status => :ok
+        shippments.service_type, shippments.destination_name')
+
+    ordersWithoutShipp = ::Order.where(:shippment_id => nil)
+
+    render json: {
+        orders_with_shipp: orders,
+        orders_without_shipp: ordersWithoutShipp
+    }, :status => :ok
   end
 
   def order_shippment
@@ -18,25 +24,71 @@ class Api::V1::Order::OrdersController < ApplicationController
   end
 
   def create_shippment
-    # Add this option later....
-    # commodities = params[:commodities]
-    # charges = params[:charges]
-    #
-    check_shipp = ::Shippment.where(order_number: params[:order_number])[0]
-    check_order = ::Order.where(order_number: params[:order_number])[0]
 
-    if check_shipp == nil
-      @shipp = ::Shippment.create!(order_detail_params)
+    order_id = params[:order_number]
+    order_params = order_detail_params
+
+    check_shipp = ::Shippment.where(order_number: order_id)[0]
+    @order = ::Order.where(order_number: order_id)[0]
+
+    puts '>>>>>>>>>>>>>>>>>>>>>>>>>>>     >>>>>>>>>>>>>>>>>>>>>>>'
+    puts @order.order_number
+
+    if check_shipp.nil?
+      puts 'CREATE SHIPMENT'
+      @shipp = ::Shippment.create!(order_params)
     else
+      puts 'MODIFY SHIPMENT'
       @shipp = check_shipp
-      @shipp.update!(order_detail_params)
+      @shipp.update!(order_params)
     end
 
-    if check_order == nil
-      @order = create(params[:order_number], @shipp[:id])
-    else
-      @order = check_order
-    end
+    @order.shippment = @shipp
+    @order.save!
+
+    # # This only needs to be associated with the shipment
+    # commodities = params[:commodities]
+    # containers = commodities[:containers] # list of ids
+    # vehicles = commodities[:vehicles] # list of vin identifiers
+    #
+    # commodity_type_vehicle = ::CommodityType.where(:custom_id => 1)[0]
+    # commodity_type_container = ::CommodityType.where(:custom_id => 2)[0]
+    #
+    #
+    # if containers.any?
+    #   containers.each do |c|
+    #     commodity = ::Commodity.where(:reference => c[:reference], :shippment_id => @shipp.id)[0]
+    #     if commodity.present?
+    #       commodity.update!(:pieces => c[:pieces])
+    #     else
+    #       ::Commodity.create!(:reference => c[:reference], :pieces => c[:pieces], :commodity_type => commodity_type_container, :shippment_id => @shipp.id)
+    #     end
+    #   end
+    # end
+    #
+    # if vehicles.any?
+    #   vehicles.each do |v|
+    #     ::Commodity.create!(:reference => v[:reference], :pieces => v[:pieces], :commodity_type => commodity_type_vehicle, :shippment_id => @shipp.id)
+    #   end
+    # end
+
+
+    # charge = params[:charge]
+    # expenses = charge.expenses # list of objects
+    # incomes = charge.incomes # list of objects
+    #
+    # expenses.each do |e|
+    #   ::Charge.new(:amount => e.amount, :vendor => e.vendor, :currency => e.currency, :reference => e.id, :type => "income",
+    #                :date => e.date, :payment => e.payment, :quantity => e.quantity, :rates => e.rate, :units => e.units)
+    # end
+    # incomes.each do |e|
+    #   ::Charge.new(:amount => e.amount, :bill_to_name => e.billToName, :bill_to => e.billTo, :currency => e.currency,
+    #                 :reference => e.id, :type => "income",
+    #                 :date => e.date, :payment => e.payment, :quantity => e.quantity, :rates => e.rate, :units => e.units)
+    # end
+
+    # ::Commodity.save
+    # ::Charge.save
 
     render json: {
         shippment: @shipp,
