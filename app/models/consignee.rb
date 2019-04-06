@@ -1,3 +1,3 @@
 class Consignee < ApplicationRecord
-  has_many :shippment
+  has_many :shippments
 end

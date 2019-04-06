@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_05_164840) do
+ActiveRecord::Schema.define(version: 2019_04_05_225344) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,14 @@ ActiveRecord::Schema.define(version: 2019_04_05_164840) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "charge_types", force: :cascade do |t|
+    t.integer "custom_id"
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "charges", force: :cascade do |t|
-    t.string "type"
     t.string "description"
     t.integer "quantity"
     t.string "unit"
@@ -32,10 +38,17 @@ ActiveRecord::Schema.define(version: 2019_04_05_164840) do
     t.string "bill_to_name"
     t.decimal "quantity_expense"
     t.integer "reference"
+    t.string "vendor"
+    t.string "bill_to"
+    t.decimal "amount"
+    t.string "currency"
+    t.decimal "payment"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "shippment_id"
     t.bigint "service_id"
+    t.bigint "charge_type_id"
+    t.index ["charge_type_id"], name: "index_charges_on_charge_type_id"
     t.index ["service_id"], name: "index_charges_on_service_id"
     t.index ["shippment_id"], name: "index_charges_on_shippment_id"
   end
@@ -78,41 +91,6 @@ ActiveRecord::Schema.define(version: 2019_04_05_164840) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "description"
-    t.bigint "shippment_id"
-    t.bigint "commodity_id"
-    t.index ["commodity_id"], name: "index_containers_on_commodity_id"
-    t.index ["shippment_id"], name: "index_containers_on_shippment_id"
-  end
-
-  create_table "expenses", force: :cascade do |t|
-    t.integer "quantity"
-    t.string "units"
-    t.string "rates"
-    t.decimal "amount"
-    t.string "currency"
-    t.string "payment"
-    t.date "date"
-    t.string "vendor"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "charge_id"
-    t.index ["charge_id"], name: "index_expenses_on_charge_id"
-  end
-
-  create_table "incomes", force: :cascade do |t|
-    t.integer "quantity"
-    t.string "units"
-    t.string "rates"
-    t.decimal "amount"
-    t.string "currency"
-    t.string "payment"
-    t.date "date"
-    t.string "bill_to_address"
-    t.string "bill_to_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "charge_id"
-    t.index ["charge_id"], name: "index_incomes_on_charge_id"
   end
 
   create_table "issuing_companies", force: :cascade do |t|
@@ -204,14 +182,11 @@ ActiveRecord::Schema.define(version: 2019_04_05_164840) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "charges", "charge_types"
   add_foreign_key "charges", "services"
   add_foreign_key "charges", "shippments"
   add_foreign_key "commodities", "commodity_types"
   add_foreign_key "commodities", "shippments"
-  add_foreign_key "containers", "commodities"
-  add_foreign_key "containers", "shippments"
-  add_foreign_key "expenses", "charges"
-  add_foreign_key "incomes", "charges"
   add_foreign_key "orders", "order_states"
   add_foreign_key "orders", "shippments"
   add_foreign_key "orders", "users"

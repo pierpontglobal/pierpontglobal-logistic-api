@@ -55,7 +55,7 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
 
         render json: {
             commodities: return_array,
-            shippment_detail: @shipp
+            shippment_detail: @shipp,
         }, :status => :ok
       else
         render json: nil, :status => :ok

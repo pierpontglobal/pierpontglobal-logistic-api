@@ -1,7 +1,6 @@
 class CreateCharges < ActiveRecord::Migration[5.2]
   def change
-    create_table :charge do |t|
-      t.string :type
+    create_table :charges do |t|
       t.string :description
       t.integer :quantity
       t.string :unit
@@ -10,6 +9,11 @@ class CreateCharges < ActiveRecord::Migration[5.2]
       t.string :bill_to_name
       t.decimal :quantity_expense
       t.integer :reference
+      t.string :vendor
+      t.string :bill_to
+      t.decimal :amount
+      t.string :currency
+      t.decimal :payment
 
       t.timestamps
     end

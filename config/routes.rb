@@ -100,6 +100,17 @@ Rails.application.routes.draw do
         delete '/', to: 'commodities#delete'
       end
 
+      namespace :charge do
+        # commodity
+        get '/', to: 'charges#show'
+        post '/', to: 'charges#create'
+        delete '/', to: 'charges#delete'
+      end
+
+      namespace :service do
+        get '/', to: 'services#show'
+      end
+
     end
   end
 
