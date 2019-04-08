@@ -5,3 +5,8 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+ChargeType.create([{custom_id: 1, name: 'Income'}, {custom_id: 2, name: 'Expense'}])
+CommodityType.create([{custom_id: 1, name: 'Vehicle'}, {custom_id: 2, name: 'Container'}])
+OrderState.create([{name: 'new'}])
+ModeOfTransportation.create([{name: 'Sea'}, {name: 'Land'}, {name: 'Air'}])

@@ -16,11 +16,13 @@ class Api::V1::Commodity::CommoditiesController < ApplicationController
 
           artifact = nil
           if commodity_type[:custom_id] == 1
+
             artifact = get_car_info(commodity[:reference])
+
           elsif commodity_type[:custom_id] == 2
-            puts 'will get commodity'
-            puts commodity[:reference]
+
             artifact = get_container_info(commodity[:reference])
+
           end
 
           if artifact == nil or artifact['status'] == 500

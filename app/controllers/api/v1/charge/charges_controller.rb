@@ -3,7 +3,7 @@ class Api::V1::Charge::ChargesController < ApplicationController
 
   def show
     charges = ::Charge.all.joins!(:charge_type, :service)
-                          .select('charges.*, charge_types.*, services.*')
+                          .select('charges.id as charge_id, charges.*, charge_types.*, services.*')
     render json: {
         charges: charges
     }, :status => :ok
@@ -11,36 +11,54 @@ class Api::V1::Charge::ChargesController < ApplicationController
 
 
   def create
-    charges = params[:charges]
-    to_add_charges = []
-    if charges.present?
-      if charges.any?
 
-        charges.each do |c|
-          to_add_charges.append(c)
-        end
+    income_params = income_paramaters
+    expense_params = expense_parameters
+    results = []
 
-        created_charges = ::Charge.create!(to_add_charges)
+    if params['income'].present?
+      charge_type = ::ChargeType.where(:custom_id => 1)[0]
+      if charge_type.present?
+        income_params['charge_type_id'] = charge_type[:id]
 
-        render json: {
-            charges: created_charges
-        }, :status => :ok
+        created_charge = ::Charge.create!(income_params)
 
-      else
-        render json: {
-            error: "Dto must be an array of charges"
-        }, :status => :bad_request
+        charge_dto = ::Charge.where(:id => created_charge[:id])
+                      .joins!(:charge_type).select('charge_types.*, charges.*')[0]
+
+        puts charge_dto.inspect
+
+        results.append(charge_dto)
       end
-    else
-      render json: {
-          error: "Please, provide the correct dto"
-      }, :status => :bad_request
+
     end
+
+    if params['expense'].present?
+      charge_type = ::ChargeType.where(:custom_id => 2)[0]
+      if charge_type.present?
+        expense_params['charge_type_id'] = charge_type[:id]
+
+        created_charge = ::Charge.create!(expense_params)
+
+        charge_dto = ::Charge.where(:id => created_charge[:id])
+                         .joins!(:charge_type).select('charge_types.*, charges.*')[0]
+
+        puts charge_dto.inspect
+
+        results.append(charge_dto)
+      end
+
+    end
+
+    render json: {
+        charges: results
+    }, :status => :ok
+
   end
 
   def delete
-    if params[:id].present?
-      charge = ::Charge.find(params[:id])
+    if params[:charge_id].present?
+      charge = ::Charge.find(params[:charge_id])
       if charge.present?
         ::Charge.destroy(charge[:id])
 
@@ -59,8 +77,15 @@ class Api::V1::Charge::ChargesController < ApplicationController
     end
   end
 
-  def charges_parameters
-    params[:charges].permit()
+  def income_paramaters
+    params.require('income').permit('quantity', 'unit', 'rate', 'bill_to_name', 'bill_to', 'amount', 'currency', 'payment',
+                                    'shippment_id', 'service_id') if params['income']
   end
+
+  def expense_parameters
+    params.require('expense').permit('quantity', 'unit', 'rate', 'vendor', 'amount', 'currency', 'payment',
+                                    'shippment_id', 'service_id') if params['expense']
+  end
+
 
 end
