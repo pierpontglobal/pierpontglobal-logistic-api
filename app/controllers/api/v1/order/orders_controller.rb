@@ -50,6 +50,21 @@ class Api::V1::Order::OrdersController < ApplicationController
 
   end
 
+  # Agents
+  # Mode of transportation
+  # Issuing company
+  # Consignee
+
+  # PATCH: /api/v1/order
+  def modify_state
+    order = ::Order.find(params[:id])
+    order.update!(order_state: OrderState.find(params[:state_id]))
+    render json: order, status: :ok
+  rescue StandardError => e
+    render json: e, status: :bad_gateway
+  end
+
+  # TODO: Elastic search
   def detail_options
     consignees = ::Consignee.all
     shippers = ::Shipper.all
@@ -66,7 +81,6 @@ class Api::V1::Order::OrdersController < ApplicationController
         issuing_companies: issuing_companies,
         agents: agents
     }, :status => :ok
-
   end
 
 

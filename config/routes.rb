@@ -30,6 +30,7 @@ Rails.application.routes.draw do
         get '/', to: 'orders#show'
         post '/create_shippment', to: 'orders#create_shippment'
         get '/options', to: 'orders#detail_options'
+        patch '/', to: 'orders#modify_state'
       end
 
       namespace :shipper do
