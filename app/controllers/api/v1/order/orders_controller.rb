@@ -5,8 +5,9 @@ class Api::V1::Order::OrdersController < ApplicationController
     token = params[:token]
 
     # Call PierpontGlobal API with token to get bids
-    orders = ::Order.all.joins!(:shippment).select('orders.order_number, orders.id, shippments.origin_name,
-        shippments.service_type, shippments.destination_name')
+    orders = ::Order.all.joins!(:shippment, :order_state).select('orders.order_number, orders.id, shippments.origin_name,
+        shippments.service_type, shippments.destination_name, order_states.name as order_state_name,
+        order_states.id as order_state_id')
 
     ordersWithoutShipp = ::Order.where(:shippment_id => nil)
 
@@ -57,8 +58,8 @@ class Api::V1::Order::OrdersController < ApplicationController
 
   # PATCH: /api/v1/order
   def modify_state
-    order = ::Order.find(params[:id])
-    order.update!(order_state: OrderState.find(params[:state_id]))
+    order = ::Order.find_by(:order_number => params[:id])
+    order.update!(:order_state => ::OrderState.find(params[:state_id]))
     render json: order, status: :ok
   rescue StandardError => e
     render json: e, status: :bad_gateway

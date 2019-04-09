@@ -2,7 +2,7 @@ class Api::V1::Charge::ChargesController < ApplicationController
   before_action :authenticate_user!
 
   def show
-    charges = ::Charge.all.joins!(:charge_type, :service)
+    charges = ::Charge.where(:shippment_id => params[:shipp_id]).joins!(:charge_type, :service)
                           .select('charges.id as charge_id, charges.*, charge_types.*, services.*')
     render json: {
         charges: charges

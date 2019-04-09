@@ -6,6 +6,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-ChargeType.create!([{custom_id: 1, name: 'Income'}, {custom_id: 2, name: 'Expense'}])
-CommodityType.create!([{custom_id: 1, name: 'Vehicle'}, {custom_id: 2, name: 'Container'}])
-ModeOfTransportation.create!([{name: 'Sea'}, {name: 'Land'}, {name: 'Air'}])
+ChargeType.where([{custom_id: 1, name: 'Income'}, {custom_id: 2, name: 'Expense'}]).first_or_create!
+CommodityType.where([{custom_id: 1, name: 'Vehicle'}, {custom_id: 2, name: 'Container'}]).first_or_create!
+ModeOfTransportation.where([{name: 'Sea'}, {name: 'Land'}, {name: 'Air'}]).first_or_create!

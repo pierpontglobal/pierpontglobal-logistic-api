@@ -112,6 +112,10 @@ Rails.application.routes.draw do
         get '/', to: 'services#show'
       end
 
+      namespace :order_state do
+        get '/', to: 'order_states#show'
+      end
+
     end
   end
 

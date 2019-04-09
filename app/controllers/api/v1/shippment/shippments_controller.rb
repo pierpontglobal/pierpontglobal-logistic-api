@@ -13,6 +13,9 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
 
   def showByOrderNumber
     if params[:order_number].present?
+      @order = ::Order.where(:order_number => params[:order_number])
+                .joins!(:order_state).select('orders.*, order_states.id as order_state_id, order_states.name as order_state_name')[0]
+
       @shipp =  ::Shippment.where(:order_number => params[:order_number])
                     .joins!(:consignee, :agent, :mode_of_transportation, :shipper, :issuing_company)
                     .select('shippments.*, consignees.name as consignee_name, consignees.address as consignee_address',
@@ -23,6 +26,10 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
                     'mode_of_transportations.name as mode_of_transportation_name')[0]
 
       if @shipp.present?
+
+        charges = ::Charge.where(:shippment_id => @shipp.id)
+                  .joins!(:charge_type, :service)
+                  .select('charge_types.*, services.*, charges.*')
 
         commodities = ::Commodity.where(:shippment_id => @shipp.id)
         return_array = []
@@ -56,6 +63,8 @@ class Api::V1::Shippment::ShippmentsController < ApplicationController
         render json: {
             commodities: return_array,
             shippment_detail: @shipp,
+            charges: charges,
+            order: @order
         }, :status => :ok
       else
         render json: nil, :status => :ok
