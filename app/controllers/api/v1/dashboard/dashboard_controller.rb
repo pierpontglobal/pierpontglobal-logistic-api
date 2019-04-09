@@ -72,14 +72,8 @@ class Api::V1::Dashboard::DashboardController < ApplicationController
       total_income = 0
       total_expense = 0
 
-      puts days_ago
-      puts day_ago
-
       incomes = ::Charge.where('created_at >= ? and created_at <= ? and charge_type_id = ?', days_ago, day_ago, 1)
       expenses = ::Charge.where('created_at >= ? and created_at <= ? and charge_type_id = ?', days_ago, day_ago, 2)
-
-      puts incomes.inspect
-      puts expenses.inspect
 
       if incomes.any?
         incomes.each { |i|
