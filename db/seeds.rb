@@ -9,3 +9,4 @@
 ChargeType.where([{custom_id: 1, name: 'Income'}, {custom_id: 2, name: 'Expense'}]).first_or_create!
 CommodityType.where([{custom_id: 1, name: 'Vehicle'}, {custom_id: 2, name: 'Container'}]).first_or_create!
 ModeOfTransportation.where([{name: 'Sea'}, {name: 'Land'}, {name: 'Air'}]).first_or_create!
+OrderState.where([{name: 'NEW'}, {name: 'COMMODITIES'}, {name: 'CHARGES'}, {name: 'COMPLETED'}]).first_or_create!

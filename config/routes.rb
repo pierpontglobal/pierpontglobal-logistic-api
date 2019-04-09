@@ -116,6 +116,11 @@ Rails.application.routes.draw do
         get '/', to: 'order_states#show'
       end
 
+      namespace :dashboard do
+        get '/', to: 'dashboard#show'
+        get '/composed_chart', to: 'dashboard#income_expense_profit_last_week'
+      end
+
     end
   end
 
