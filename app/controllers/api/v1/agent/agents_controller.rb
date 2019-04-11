@@ -21,15 +21,34 @@ class Api::V1::Agent::AgentsController < ApplicationController
 
   def update
     if params[:id].present?
-      result = ::Agent.where(:id => params[:id]).update!(agent_parameters)
-      render json: result, :status => :ok
+      agent = ::Agent.find(params[:id])
+      result = agent.update!(agent_parameters)
+      render json: agent, :status => :ok
     end
+  rescue StandardError => e
+    render json: {
+        error: e
+    }, :status => :bad_gateway
   end
 
   def delete
     if params[:id].present?
-      result = ::Agent.find(params[:id]).destroy
-      render json: result, :status => :ok
+      result = ::Agent.find(params[:id])
+      if result.present?
+
+        begin
+          result.destroy!
+          render json: result, :status => :ok
+
+        rescue ActiveRecord::InvalidForeignKey => e
+          render json: {
+              error: e
+          }, :status => :bad_gateway
+        end
+
+      else
+        render json: { error: "Agent not found" }, :status => :ok
+      end
     else
       render json: { error: "Please, provide an ID" }, :status => :ok
     end

@@ -32,11 +32,15 @@ class Api::V1::Consignee::ConsigneesController < ApplicationController
 
   def delete
     if params[:id].present?
-      result = ::Consignee.destroy(params[:id])
+      result = ::Consignee.find(params[:id]).destroy
       render json: result, :status => :ok
     else
       render json: { error: "Please, provide an ID" }, :status => :ok
     end
+  rescue ActiveRecord::InvalidForeignKey => e
+    render json: {
+        error: e
+    }, :status => :bad_gateway
   end
 
 

@@ -21,8 +21,13 @@ class Api::V1::ModeOfTransportation::ModeOfTransportationsController < Applicati
 
   def update
     if params[:id].present?
-      result = ::ModeOfTransportation.where(:id => params[:id]).update!(transport_paramaters)
-      render json: result, :status => :ok
+      result = ::ModeOfTransportation.find(params[:id])
+      if result.present?
+        result.update(transport_paramaters)
+        render json: result, :status => :ok
+      else
+        render json: { error: 'Mode of transport not found '}, :status => :not_found
+      end
     end
   end
 
@@ -33,6 +38,10 @@ class Api::V1::ModeOfTransportation::ModeOfTransportationsController < Applicati
     else
       render json: { error: "Please, provide an ID" }, :status => :ok
     end
+  rescue ActiveRecord::InvalidForeignKey => e
+    render json: {
+        error: e
+    }, :status => :bad_gateway
   end
 
 
